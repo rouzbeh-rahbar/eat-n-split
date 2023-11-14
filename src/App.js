@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const initialFriends = [
   {
     id: 118836,
@@ -20,15 +22,35 @@ const initialFriends = [
 ];
 
 export default function App() {
+  // by default the FormAddFriend should be hiedden
+  const [showAddFriend, setShowAddFriend] = useState(false);
+
+  function handleShowAddFriend() {
+    // we use call back function, because the new state depends on the current state
+    setShowAddFriend((show) => !show);
+  }
+
   return (
     <div className="app">
       <div className="sidebar">
         <FirendsList />
-        <Form />
-        <Button>Add Friend</Button>
+        {showAddFriend && <FormAddFriend />}
+        <Button onClick={handleShowAddFriend}>
+          {showAddFriend ? "close" : "Add Friend"}
+        </Button>
       </div>
       <FormSplitBill />
     </div>
+  );
+}
+
+//we use button multiple time therefore we create a button component.
+// we can not add to <Button/> the property onClick, because it is not native HTML
+function Button({ children, onClick, onShowAddFriend }) {
+  return (
+    <button className="button" onClick={onClick}>
+      {children}
+    </button>
   );
 }
 
@@ -77,12 +99,7 @@ function Friend({ firend }) {
   );
 }
 
-//we use button multiple time therefore we create a button component.
-function Button({ children }) {
-  return <button className="button">{children}</button>;
-}
-
-function Form() {
+function FormAddFriend() {
   return (
     <form className="form-add-friend">
       <label>👯FriendName</label>
